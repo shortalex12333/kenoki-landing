@@ -1191,9 +1191,9 @@ async function loadData() {
 
   // Populate tag filter — exclude import-source metadata tags
   const sel = document.getElementById('tag-filter');
-  const tags = [...new Set(data.tags.map(t => t.tag).filter(t => !IMPORT_SOURCE_TAGS.has(t)))].sort();
+  const tagNames = [...new Set(data.tags.map(t => t.tag).filter(t => !IMPORT_SOURCE_TAGS.has(t)))].sort();
   sel.innerHTML = `<option value="all">All (${data.people.length})</option>` +
-    tags.map(t => `<option value="${t}">${t}</option>`).join('');
+    tagNames.map(t => `<option value="${t}">${t}</option>`).join('');
 
   chatContext = null;
 }
