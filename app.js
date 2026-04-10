@@ -1146,23 +1146,33 @@ let panelPerson = null;   // person currently shown in side panel
 // DATA
 // ═══════════════════════════════════════════════════════════════
 
+// Paginate through all rows — Supabase PostgREST caps at 1000 rows server-side
+// regardless of .range() client-side hint. Fetch in 1000-row pages until exhausted.
+async function fetchAll(query) {
+  const PAGE = 1000;
+  let all = [], page = 0, done = false;
+  while (!done) {
+    const { data, error } = await query.range(page * PAGE, page * PAGE + PAGE - 1);
+    if (error || !data || data.length === 0) break;
+    all = all.concat(data);
+    done = data.length < PAGE;
+    page++;
+  }
+  return all;
+}
+
 async function loadData() {
   const uid = currentUser?.id;
-  // Supabase defaults to 1000 rows max — override with .range()
   // Exclude embedding column from people (384 floats × 2k rows = 3MB we never need in memory)
-  const [p, c, r, t, e, ie] = await Promise.all([
-    sb.from('people').select('id,user_id,full_name,role,phone,linkedin_url,notes,last_contact,company_id,industry,what_they_do,what_they_offer,what_they_want,next_action,created_at').eq('user_id', uid).range(0, 9999),
-    sb.from('companies').select('*').eq('user_id', uid).range(0, 9999),
-    sb.from('relationships').select('*').eq('user_id', uid).range(0, 9999),
-    sb.from('tags').select('*').eq('user_id', uid).range(0, 9999),
-    sb.from('events').select('*').eq('user_id', uid).range(0, 9999),
-    sb.from('inferred_edges').select('person_a_id,person_b_id,edge_type,strength').eq('user_id', uid).range(0, 29999),
+  const [people, companies, relationships, tags, events, inferredEdges] = await Promise.all([
+    fetchAll(sb.from('people').select('id,user_id,full_name,role,phone,linkedin_url,notes,last_contact,company_id,industry,what_they_do,what_they_offer,what_they_want,next_action,created_at').eq('user_id', uid)),
+    fetchAll(sb.from('companies').select('*').eq('user_id', uid)),
+    fetchAll(sb.from('relationships').select('*').eq('user_id', uid)),
+    fetchAll(sb.from('tags').select('*').eq('user_id', uid)),
+    fetchAll(sb.from('events').select('*').eq('user_id', uid)),
+    fetchAll(sb.from('inferred_edges').select('person_a_id,person_b_id,edge_type,strength').eq('user_id', uid)),
   ]);
-  data = {
-    people: p.data || [], companies: c.data || [],
-    relationships: r.data || [], tags: t.data || [], events: e.data || [],
-    inferredEdges: ie.data || [],
-  };
+  data = { people, companies, relationships, tags, events, inferredEdges };
 
   tagsByPerson = new Map();
   data.tags.forEach(t => {
@@ -2652,14 +2662,14 @@ async function startEmbeddingQueue() {
   if (!currentUser || !window.Worker) return;
 
   // Fetch which people have no embedding (quick count query)
-  const { data: unembedded } = await sb
-    .from('people')
-    .select('id,full_name,role,industry,what_they_do')
-    .eq('user_id', currentUser.id)
-    .is('embedding', null)
-    .range(0, 4999);
+  const unembedded = await fetchAll(
+    sb.from('people')
+      .select('id,full_name,role,industry,what_they_do')
+      .eq('user_id', currentUser.id)
+      .is('embedding', null)
+  );
 
-  if (!unembedded || !unembedded.length) return;
+  if (!unembedded.length) return;
 
   embedQueue = [...unembedded];
   embedProcessed = 0;
