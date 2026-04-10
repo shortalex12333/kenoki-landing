@@ -1478,6 +1478,9 @@ function buildGraph() {
   if (network) network.destroy();
 
   network = new vis.Network(container, { nodes, edges }, {
+    layout: {
+      improvedLayout: false,   // must be false for large graphs (>500 nodes) — otherwise vis freezes
+    },
     physics: {
       solver: 'forceAtlas2Based',
       forceAtlas2Based: {
