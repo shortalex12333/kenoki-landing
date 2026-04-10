@@ -1,0 +1,152 @@
+/* ═══════════════════════════════════════════════════════════════
+   PROTOTYPE TOKENS — Single Source of Truth
+   Every prototype file links here (directly or via lens-base.css).
+   NO inline :root token blocks allowed in any HTML file.
+
+   Naming: Short names (--txt, --surface, --mark) are canonical.
+   Qualified names (--txt-primary, --surface-primary, --mark-colour)
+   are aliases for elegant/auth backward compatibility.
+
+   Value reconciliation (where lens-base and elegant/auth diverged):
+   – txt3:         0.40 → 0.70  (user bumped for contrast)
+   – txt-ghost:    0.20 → 0.40  (user bumped for contrast)
+   – border-top:   0.13 → 0.11  (elegant is more recent, approved)
+   – border-sub:   0.06 → 0.07  (align to elegant)
+   – border-faint: 0.03 → 0.04  (align to elegant)
+   – surface-hover: #252525 → #242424  (brand: neutral grey, not warm)
+   – teal-bg:      0.13/0.10 → 0.12  (split — consistent buttons)
+   – amber:        keep #C4893B  (more readable)
+   – green:        keep #4A9468  (more muted, less minty)
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ─── DARK MODE (default) ─── */
+:root {
+  /* ── Surfaces ── */
+  --surface-base: #0c0b0a;
+  --surface:      #181614;
+  --surface-el:   #1e1b18;
+  --surface-hover:#242424;
+
+  /* ── Borders ── */
+  --border-sub:   rgba(255,255,255,0.07);
+  --border-top:   rgba(255,255,255,0.11);
+  --border-side:  rgba(255,255,255,0.06);
+  --border-bottom:rgba(255,255,255,0.03);
+  --border-faint: rgba(255,255,255,0.04);
+  --border-chrome:rgba(255,255,255,0.08);
+
+  /* ── Shadows ── */
+  --shadow-panel: 0 0 0 1px rgba(0,0,0,0.60), 0 28px 80px rgba(0,0,0,0.80);
+  --shadow-drop:  0 8px 24px rgba(0,0,0,0.50);
+  --shadow-tip:   0 4px 12px rgba(0,0,0,0.40);
+
+  /* ── Glass / Split ── */
+  --glass-bg:     rgba(16,14,12,0.65);
+  --split-bg:     rgba(255,255,255,0.06);
+  --split-bg-hover:rgba(255,255,255,0.10);
+
+  /* ── Text ── */
+  --txt:          rgba(255,255,255,0.92);
+  --txt2:         rgba(255,255,255,0.55);
+  --txt3:         rgba(255,255,255,0.70);
+  --txt-ghost:    rgba(255,255,255,0.40);
+
+  /* ── Brand (Orange) ── */
+  --mark:         #E76F51;
+  --mark-secondary: #F4A261;
+  --mark-accent:  #E9C46A;
+  --teal:         #C05A3C;
+  --teal-bg:      rgba(231,111,81,0.12);
+  --mark-hover:   rgba(231,111,81,0.22);
+  --mark-underline:rgba(244,162,97,0.3);
+  --mark-thumb:   rgba(231,111,81,0.25);
+  --on-status:    #fff;
+  --neutral-bg:   rgba(255,255,255,0.05);
+
+  /* ── Signal colours ── */
+  --red:          #C0503A;
+  --red-bg:       rgba(192,80,58,0.10);
+  --red-border:   rgba(192,80,58,0.22);
+  --amber:        #F4A261;
+  --amber-bg:     rgba(244,162,97,0.10);
+  --amber-border: rgba(244,162,97,0.22);
+  --green:        #2A9D8F;
+  --green-bg:     rgba(42,157,143,0.10);
+  --green-border: rgba(42,157,143,0.22);
+  --blue:         #E76F51;
+  --blue-bg:      rgba(231,111,81,0.10);
+  --blue-border:  rgba(231,111,81,0.22);
+
+  /* ── Typography ── */
+  --font-sans:    'Inter', system-ui, -apple-system, sans-serif;
+  --font-mono:    'SF Mono','Fira Code', ui-monospace, monospace;
+
+  /* ── Dual aliases (elegant / auth naming) ── */
+  --bg:               var(--surface-base);
+  --surface-primary:  var(--surface);
+  --surface-elevated: var(--surface-el);
+  --border:           var(--border-sub);
+  --border-subtle:    var(--border-faint);
+  --txt-primary:      var(--txt);
+  --txt-secondary:    var(--txt2);
+  --txt-tertiary:     var(--txt3);
+  --mark-colour:      var(--mark);
+}
+
+/* ─── LIGHT MODE ─── */
+[data-theme="light"] {
+  /* ── Surfaces ── */
+  --surface-base: #FFFFFF;
+  --surface:      #F8F8F8;
+  --surface-el:   #FFFFFF;
+  --surface-hover:#F0F0F0;
+
+  /* ── Borders ── */
+  --border-sub:   rgba(0,0,0,0.08);
+  --border-top:   rgba(0,0,0,0.08);
+  --border-side:  rgba(0,0,0,0.05);
+  --border-bottom:rgba(0,0,0,0.02);
+  --border-faint: rgba(0,0,0,0.04);
+  --border-chrome:rgba(0,0,0,0.08);
+
+  /* ── Shadows ── */
+  --shadow-panel: 0 0 0 1px rgba(0,0,0,0.08), 0 28px 80px rgba(0,0,0,0.15);
+  --shadow-drop:  0 8px 24px rgba(0,0,0,0.12);
+  --shadow-tip:   0 4px 12px rgba(0,0,0,0.08);
+
+  /* ── Glass / Split ── */
+  --glass-bg:     rgba(248,248,248,0.85);
+  --split-bg:     rgba(0,0,0,0.04);
+  --split-bg-hover:rgba(0,0,0,0.08);
+
+  /* ── Text ── */
+  --txt:          rgba(0,0,0,0.87);
+  --txt2:         rgba(0,0,0,0.55);
+  --txt3:         rgba(0,0,0,0.38);
+  --txt-ghost:    rgba(0,0,0,0.20);
+
+  /* ── Brand (Orange) ── */
+  --mark:         #C05A3C;
+  --mark-secondary: #D4884A;
+  --mark-accent:  #C9A84E;
+  --teal-bg:      rgba(192,90,60,0.08);
+  --mark-hover:   rgba(192,90,60,0.16);
+  --mark-underline:rgba(192,90,60,0.3);
+  --mark-thumb:   rgba(192,90,60,0.20);
+  --on-status:    #fff;
+  --neutral-bg:   rgba(0,0,0,0.04);
+
+  /* ── Signal colours ── */
+  --red:          #C0503A;
+  --red-bg:       rgba(192,80,58,0.06);
+  --red-border:   rgba(192,80,58,0.15);
+  --amber:        #D4884A;
+  --amber-bg:     rgba(212,136,74,0.06);
+  --amber-border: rgba(212,136,74,0.15);
+  --green:        #2A9D8F;
+  --green-bg:     rgba(42,157,143,0.06);
+  --green-border: rgba(42,157,143,0.15);
+  --blue:         #C05A3C;
+  --blue-bg:      rgba(192,90,60,0.06);
+  --blue-border:  rgba(192,90,60,0.15);
+}

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenoki — Launch Playbook</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; background: #fff; color: #0A0A0A; padding: 2rem; max-width: 780px; margin: 0 auto; }
+  h1 { font-size: 28px; font-weight: 500; margin-bottom: 4px; }
+  .sub { font-size: 14px; color: #666; margin-bottom: 1.5rem; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  .chip { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; padding: 4px 10px; border: 0.5px solid #ddd; border-radius: 20px; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .d-green { background: #22C55E; } .d-amber { background: #F59E0B; } .d-gray { background: #94A3B8; }
+  .section { margin-bottom: 2rem; }
+  .sec-label { font-size: 11px; font-weight: 500; color: #666; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+  .card { background: #fff; border: 0.5px solid #e0e0e0; border-radius: 12px; padding: 1rem 1.25rem; margin-bottom: 10px; }
+  .card-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 8px; }
+  .b-ph { background: #FFF0EC; color: #993C1D; }
+  .b-gh { background: #F1EFE8; color: #444441; }
+  .b-li { background: #E6F1FB; color: #0C447C; }
+  .b-x  { background: #F1EFE8; color: #2C2C2A; }
+  .b-rd { background: #FAECE7; color: #712B13; }
+  .b-now  { background: #EAF3DE; color: #3B6D11; }
+  .b-week { background: #FAEEDA; color: #854F0B; }
+  .b-live { background: #E1F5EE; color: #0F6E56; }
+  .step { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; }
+  .sn { width: 20px; height: 20px; min-width: 20px; border-radius: 50%; background: #f5f5f5; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: #0A0A0A; margin-top: 1px; }
+  .step-txt { font-size: 13px; color: #0A0A0A; line-height: 1.5; }
+  .copy { background: #f8f8f8; border-radius: 8px; padding: 10px 12px; font-size: 13px; color: #0A0A0A; line-height: 1.65; margin: 10px 0; border-left: 2px solid #ccc; }
+  .copy-label { font-size: 11px; font-weight: 500; color: #666; margin-bottom: 6px; text-transform: uppercase; letter-spacing: .05em; }
+  .img-row { display: flex; flex-direction: column; gap: 4px; margin: 8px 0; }
+  .img-item { display: flex; align-items: flex-start; gap: 8px; font-size: 12px; color: #666; padding: 5px 8px; background: #f8f8f8; border-radius: 8px; }
+  .img-sq { width: 14px; height: 14px; min-width: 14px; border: 1px solid #ccc; border-radius: 3px; margin-top: 1px; }
+  .divider { border: none; border-top: 0.5px solid #e8e8e8; margin: 1.5rem 0; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 12px; background: #f5f5f5; color: #666; border: 0.5px solid #ddd; }
+  .checklist { list-style: none; }
+  .cl-item { display: flex; gap: 8px; align-items: flex-start; padding: 6px 0; border-bottom: 0.5px solid #eee; font-size: 13px; color: #0A0A0A; }
+  .cl-item:last-child { border-bottom: none; }
+  .cl-mark { color: #aaa; font-size: 11px; margin-top: 2px; min-width: 12px; }
+  .note { font-size: 12px; color: #666; font-style: italic; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<h1>Kenoki</h1>
+<div class="sub">Launch playbook — where to post, what to say, in what order</div>
+
+<div class="legend">
+  <div class="chip"><div class="dot d-green"></div>Do today</div>
+  <div class="chip"><div class="dot d-amber"></div>This week</div>
+  <div class="chip"><div class="dot d-gray"></div>This month</div>
+</div>
+
+<div class="section">
+  <div class="sec-label"><span>1 — GitHub</span><span class="badge b-now">Today</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-gh">GitHub</span>
+      <span style="font-size:13px;color:#666">First. Everything else links back here.</span>
+    </div>
+    <div class="step"><div class="sn">1</div><div class="step-txt">Make the repo public if it is not already</div></div>
+    <div class="step"><div class="sn">2</div><div class="step-txt">Add topics to the repo so it surfaces in search</div></div>
+    <div class="tag-row"><span class="tag">crm</span><span class="tag">ai</span><span class="tag">networking</span><span class="tag">personal-crm</span><span class="tag">sqlite</span><span class="tag">react-native</span><span class="tag">ollama</span><span class="tag">whisper</span><span class="tag">knowledge-graph</span></div>
+    <div class="step" style="margin-top:8px"><div class="sn">3</div><div class="step-txt">Write the README — use this opener</div></div>
+    <div class="copy">
+      <div class="copy-label">README opener</div>
+      Kenoki is a voice-first relationship intelligence app. Speak a note after every meeting. It extracts who you met, what they do, who they know — and builds a queryable local knowledge graph of your entire network. Import from LinkedIn. Ask questions in plain language. Runs fully on your device.<br><br>
+      Live at kenoki.app &middot; MIT licence &middot; Free forever
+    </div>
+    <div class="img-row">
+      <div class="img-item"><div class="img-sq"></div>Dashboard screenshot with a populated network — shows it works</div>
+      <div class="img-item"><div class="img-sq"></div>GIF or screen recording: voice note spoken &rarr; contact appears — this is the magic moment</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="sec-label"><span>2 — Product Hunt</span><span class="badge b-week">This week — biggest lever</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-ph">Product Hunt</span>
+      <span style="font-size:13px;color:#666">Highest impact. Do before anything else goes wide.</span>
+    </div>
+    <div class="step"><div class="sn">1</div><div class="step-txt">Go to producthunt.com/ships — submit a ship to build a pre-launch waitlist</div></div>
+    <div class="step"><div class="sn">2</div><div class="step-txt">Schedule full launch for Tuesday, Wednesday, or Thursday — higher traffic days</div></div>
+    <div class="step"><div class="sn">3</div><div class="step-txt">Launch at 12:01am PST — posts reset daily, earlier posts get more visible hours</div></div>
+    <div class="step"><div class="sn">4</div><div class="step-txt">Post a maker comment yourself within the first hour</div></div>
+    <div class="copy">
+      <div class="copy-label">Tagline (120 chars max)</div>
+      Voice-first relationship intelligence. Speak a note, build your network graph. Free, local, open source.
+    </div>
+    <div class="copy">
+      <div class="copy-label">Maker comment</div>
+      Hey PH — I built Kenoki because I kept meeting people at events and losing the context of who they knew, what they wanted, how we connected. Every CRM I tried required too much manual input to be worth it.<br><br>
+      Kenoki lets you speak a 30-second voice note after any meeting. It extracts the person, their company, who they know, what they want — and writes it to a local graph you can query in plain language. Import your LinkedIn connections to get started instantly.<br><br>
+      Fully local. Open source. Free. Bring your own AI provider or use Ollama for zero cost.<br><br>
+      Would love feedback — especially from anyone in finance, brokerage, VC, or recruiting where relationships are everything.
+    </div>
+    <div class="img-row">
+      <div class="img-item"><div class="img-sq"></div>Image 1 — App logo on clean white background</div>
+      <div class="img-item"><div class="img-sq"></div>Image 2 — Dashboard with a populated network</div>
+      <div class="img-item"><div class="img-sq"></div>Image 3 — Query interface showing a real question answered</div>
+      <div class="img-item"><div class="img-sq"></div>Image 4 — LinkedIn import flow — strong hook, unique feature</div>
+      <div class="img-item"><div class="img-sq"></div>Video (optional but powerful) — 60 second screen record: voice &rarr; parsed &rarr; query answered</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="sec-label"><span>3 — X / Twitter</span><span class="badge b-week">Same day as Product Hunt launch</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-x">X</span>
+      <span style="font-size:13px;color:#666">Devs and indie builders live here. This gets you GitHub stars.</span>
+    </div>
+    <div class="copy">
+      <div class="copy-label">Post copy</div>
+      I built a voice-first personal CRM and open sourced it today.<br><br>
+      You speak a note after every meeting. AI extracts the person, their company, who they know, what they want. Builds a local relationship graph you can query in plain language.<br><br>
+      Import your LinkedIn connections in one click. Free. Fully local. Bring your own AI or use Ollama.<br><br>
+      kenoki.app<br><br>
+      GitHub: [link] &middot; Product Hunt: [link]
+    </div>
+    <div class="img-row">
+      <div class="img-item"><div class="img-sq"></div>Attach the 60 second screen recording — video autoplay on X gets significantly higher reach than static images</div>
+    </div>
+    <div class="note">In replies to traction add: "built this because I kept losing context after meetings in my work as an insurance broker for superyacht owners in Miami" — that specificity is magnetic on X</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="sec-label"><span>4 — LinkedIn</span><span class="badge b-week">Day after launch</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-li">LinkedIn</span>
+      <span style="font-size:13px;color:#666">Different audience. Tell the human story, not the technical one.</span>
+    </div>
+    <div class="copy">
+      <div class="copy-label">Post copy</div>
+      I moved from the UK to Miami with no network, no contacts, and no job.<br><br>
+      I spent 12 months meeting people at boat shows, cigar bars, marina events — building relationships from zero in a foreign country.<br><br>
+      And I kept losing the context. Who introduced me to who. What they mentioned they needed. Who they knew that I should meet.<br><br>
+      So I built Kenoki — a voice-first relationship intelligence app. Speak a note after every meeting. It maps your network automatically.<br><br>
+      Free. Open source. Live today at kenoki.app<br><br>
+      If you live and die by your network — this is for you.
+    </div>
+    <div class="img-row">
+      <div class="img-item"><div class="img-sq"></div>Dashboard screenshot — LinkedIn prefers clean UI images over video in the feed</div>
+    </div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="sec-label"><span>5 — Reddit</span><span class="badge b-week">This week — three separate posts</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-rd">Reddit</span>
+      <span style="font-size:13px;color:#666">Each subreddit gets a different angle. Do not cross-post the same copy.</span>
+    </div>
+    <ul class="checklist">
+      <li class="cl-item"><span class="cl-mark">r/</span><div><strong>r/selfhosted</strong> — lead with "fully local, no cloud, Ollama support, your data never leaves your device" — this community cares about that above everything</div></li>
+      <li class="cl-item"><span class="cl-mark">r/</span><div><strong>r/opensource</strong> — lead with MIT licence, open architecture, contributions welcome, link to GitHub</div></li>
+      <li class="cl-item"><span class="cl-mark">r/</span><div><strong>r/productivity</strong> — lead with the problem: "I kept losing context after every meeting" — personal story first, then the solution</div></li>
+    </ul>
+    <div class="note" style="margin-top:8px">Read each subreddit's rules before posting. r/selfhosted and r/opensource are tolerant of launch posts. r/productivity less so — frame as "I built this for myself and thought others might find it useful" not as a launch announcement.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="sec-label"><span>6 — Hacker News</span><span class="badge b-week">This week — Show HN post</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-gh">Hacker News</span>
+      <span style="font-size:13px;color:#666">Most technical audience. Highest upside if it lands.</span>
+    </div>
+    <div class="copy">
+      <div class="copy-label">Title (exact format required)</div>
+      Show HN: Kenoki – voice-first personal CRM that builds a local relationship graph
+    </div>
+    <div class="copy">
+      <div class="copy-label">First comment — post this yourself immediately after submitting</div>
+      Built this because I kept losing context after meetings — who introduced me to who, what they mentioned, who they knew.<br><br>
+      You speak a 30-second voice note. Whisper transcribes it. Claude or GPT-4 extracts structured entities — person, company, relationships, tags, next action — and writes them to a local SQLite graph. You can then query the graph in plain language.<br><br>
+      Also supports LinkedIn CSV import to populate the graph instantly from your existing connections.<br><br>
+      Fully local. No cloud database. Bring your own API key or use Ollama for zero cost. MIT licence.<br><br>
+      Stack: React Native, SQLite, Whisper API, Anthropic / OpenAI.
+    </div>
+    <div class="note">Post between 9am–11am EST on a weekday. Do not post weekends. Be ready to respond to technical questions within the first two hours.</div>
+  </div>
+</div>
+
+<hr class="divider">
+
+<div class="section">
+  <div class="sec-label"><span>7 — In person</span><span class="badge b-live">Every meeting from today</span></div>
+  <div class="card">
+    <div class="card-head">
+      <span class="badge b-live">Live</span>
+      <span style="font-size:13px;color:#666">Marlins VIP. Miami Beach volleyball. Every event.</span>
+    </div>
+    <div class="step"><div class="sn">1</div><div class="step-txt">When someone asks what you do outside insurance — pull out your phone and show them Kenoki in 30 seconds</div></div>
+    <div class="step"><div class="sn">2</div><div class="step-txt">Speak a voice note about them in front of them — show them they just became a node in your graph. Nobody forgets that.</div></div>
+    <div class="step"><div class="sn">3</div><div class="step-txt">Ask if they want the app — direct them to kenoki.app</div></div>
+    <div class="note" style="margin-top:6px">The Starbucks investor, the PBS Miami owner, the MMA CFO — all become case studies you reference with the next person. "The CFO of a Fortune 500 insurance firm is already using it" is a sentence you can say.</div>
+  </div>
+</div>
+
+</body>
+</html>

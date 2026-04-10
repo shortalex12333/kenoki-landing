@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kenoki</title>
+<link rel="icon" type="image/png" sizes="32x32" href="favicon.ico">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="img/k-med.png">
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="app.css">
+<script src="https://cdn.jsdelivr.net/npm/vis-network@9.1.9/standalone/umd/vis-network.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+<script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.78/build/spline-viewer.js"></script>
+</head>
+<body class="loading">
+
+<!-- ═══ LANDING WRAPPER (scrollable) ═══ -->
+<div class="landing-wrap" id="landing-wrap">
+
+<!-- HERO -->
+<div class="welcome" id="welcome">
+  <spline-viewer url="./scene.splinecode?v=2" class="welcome-spline"></spline-viewer>
+  <div class="welcome-content">
+    <img src="img/k-med.png" alt="Kenoki" class="welcome-logo" />
+    <div class="welcome-brand">KENOKI</div>
+    <div class="welcome-tagline">Relationship Intelligence</div>
+    <button class="welcome-btn" id="welcome-btn">Get started — free</button>
+  </div>
+  <div class="welcome-scroll-hint">
+    <span>Learn more</span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+  </div>
+</div>
+
+<!-- LANDING CONTENT -->
+<div class="landing">
+
+  <!-- Section 1: LIVE GRAPH DEMO (hero feature) -->
+  <div class="land-section land-section-wide">
+    <div class="land-graph-header">
+      <div>
+        <div class="land-overline">See your network</div>
+        <div class="land-h2">Every connection.<br><span class="hl">Visible. Queryable.</span></div>
+      </div>
+      <div class="land-body" style="margin-bottom:0">Hover over anyone. See who they know, where they work, how they connect. This is a live demo — try it.</div>
+    </div>
+    <div id="demo-graph" class="demo-graph-canvas"></div>
+  </div>
+
+  <!-- Section 2: Value prop -->
+  <div class="land-section">
+    <div class="land-overline">The problem</div>
+    <div class="land-h2">Your network is your most valuable asset.<br><span class="hl">You have no system for it.</span></div>
+    <div class="land-body">You've met hundreds of people. You can't search them. You can't query them. You can't see how they connect. Kenoki changes that.</div>
+    <div class="stat-cards">
+      <div class="stat-card">
+        <div class="stat-card-num">2,000+</div>
+        <div class="stat-card-label">Connections you've made</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">0</div>
+        <div class="stat-card-label">That you can query right now</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num">Free</div>
+        <div class="stat-card-label">Forever. No credit card.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: How it works -->
+  <div class="land-section">
+    <div class="land-overline">How it works</div>
+    <div class="land-h2">3 minutes.<br><span class="hl">Your entire network.</span></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <div class="step-title">Sign up</div>
+          <div class="step-desc">Free account. No credit card. No trial period.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <div class="step-title">Import your contacts</div>
+          <div class="step-desc">LinkedIn, iPhone, Google Contacts, Outlook, or any CSV. Upload once.</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <div class="step-title">See your network</div>
+          <div class="step-desc">Interactive graph. Search. Filter. Ask questions. Add interactions over time.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: Import sources -->
+  <div class="land-section">
+    <div class="land-overline">Import</div>
+    <div class="land-h2">Bring your contacts <span class="hl">from anywhere.</span></div>
+    <div class="land-body">One upload. Auto-detected format. Duplicate protection built in.</div>
+    <div class="source-grid">
+      <div class="source-card">
+        <div class="source-name">LinkedIn</div>
+        <div class="source-desc">Export connections, upload here</div>
+        <div class="source-format">.csv</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">iPhone / iCloud</div>
+        <div class="source-desc">Export contacts as vCard</div>
+        <div class="source-format">.vcf</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Google Contacts</div>
+        <div class="source-desc">Export from contacts.google.com</div>
+        <div class="source-format">.csv</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Outlook</div>
+        <div class="source-desc">Export from People section</div>
+        <div class="source-format">.csv</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Facebook</div>
+        <div class="source-desc">Download your data</div>
+        <div class="source-format">.json</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Any CSV</div>
+        <div class="source-desc">Any spreadsheet with names</div>
+        <div class="source-format">.csv .xlsx</div>
+      </div>
+    </div>
+
+    <!-- Rendered mockup: drag-and-drop import -->
+    <div class="demo-panel" style="margin-top:40px">
+      <div class="demo-label">What it looks like</div>
+      <div class="demo-import">
+        <div class="demo-drop">
+          <div class="demo-drop-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="demo-drop-text">Drop file here or click to browse</div>
+          <div class="demo-drop-formats">CSV, vCard, JSON, Excel, ZIP</div>
+        </div>
+        <div class="demo-detected">Detected: LinkedIn CSV</div>
+        <div class="demo-table-wrap">
+          <table class="demo-table">
+            <thead>
+              <tr><th>Name</th><th>Position</th><th>Company</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              <tr class="demo-row-new"><td>Sarah Chen</td><td>Partner</td><td>Sequoia Capital</td><td class="demo-status-new">new</td></tr>
+              <tr class="demo-row-new"><td>James Carter</td><td>Head of Sales</td><td>Stripe</td><td class="demo-status-new">new</td></tr>
+              <tr class="demo-row-new"><td>Maria Lopez</td><td>Founder</td><td>Luma Health</td><td class="demo-status-new">new</td></tr>
+              <tr class="demo-row-dupe"><td>Ben Turner</td><td>VP Engineering</td><td>Notion</td><td class="demo-status-dupe">exists</td></tr>
+              <tr class="demo-row-new"><td>Katy Mills</td><td>Talent Lead</td><td>Accel</td><td class="demo-status-new">new</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="demo-import-footer">
+          <span class="demo-count">247 contacts found &middot; 3 already exist</span>
+          <span class="demo-import-btn">Import 244 new contacts</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- (Graph moved to top as live demo) -->
+
+  <!-- Section 5: AI -->
+  <div class="land-section">
+    <div class="land-overline">Intelligence</div>
+    <div class="land-h2">AI is <span class="hl">optional.</span><br>You choose the provider.</div>
+    <div class="land-body">Kenoki works without AI. Add contacts manually, browse the graph, filter by tags. When you want more — connect any provider.</div>
+    <div class="provider-grid">
+      <div class="source-card">
+        <div class="source-name">Ollama</div>
+        <div class="source-desc">Free. Runs locally on your machine. Fully private.</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">OpenAI</div>
+        <div class="source-desc">GPT-4o. Paste your API key.</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">Claude</div>
+        <div class="source-desc">Anthropic. Paste your API key.</div>
+      </div>
+      <div class="source-card">
+        <div class="source-name">No AI</div>
+        <div class="source-desc">Skip entirely. Add contacts manually.</div>
+      </div>
+    </div>
+
+    <div class="land-overline" style="margin-top:48px">Why AI?</div>
+    <div class="ai-reasons">
+      <div class="ai-reason">
+        <div class="ai-reason-icon">&rarr;</div>
+        <div class="ai-reason-text"><strong>Parse freeform text.</strong> Type "Met Sarah at Demo Day, she's a partner at Sequoia" — AI extracts name, role, company, event automatically.</div>
+      </div>
+      <div class="ai-reason">
+        <div class="ai-reason-icon">?</div>
+        <div class="ai-reason-text"><strong>Ask questions.</strong> "Who should I follow up with?" "Who do I know in venture capital?" "Who haven't I contacted in 30 days?" Answers from your data, not the internet.</div>
+      </div>
+      <div class="ai-reason">
+        <div class="ai-reason-icon">0</div>
+        <div class="ai-reason-text"><strong>Zero manual entry.</strong> Describe what happened after a meeting. AI fills in the fields. You verify before saving. No spreadsheet, no forms.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 6: Adding interactions -->
+  <div class="land-section">
+    <div class="land-overline">Workflow</div>
+    <div class="land-h2">After every meeting,<br><span class="hl">open Kenoki.</span></div>
+    <div class="land-body">Click "+ Add" on your graph. Type what happened. AI extracts the data. You verify before anything saves.</div>
+
+    <!-- Mockup: the + Add overlay -->
+    <div class="demo-panel" style="margin-top:32px">
+      <div class="demo-label">The + Add overlay</div>
+      <div class="demo-overlay-mock">
+        <div class="demo-overlay-bg"></div>
+        <div class="demo-overlay-modal">
+          <div class="demo-textarea-mock">Had coffee with Sarah. She's a partner at Sequoia. Knows James from the YC Demo Day. Follow up Thursday about the Series A.</div>
+          <div class="demo-modal-footer">
+            <span class="demo-hint">Enter to process</span>
+            <div class="demo-modal-btns">
+              <span class="demo-btn-ghost">Cancel</span>
+              <span class="demo-btn-primary">Process</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arrow down -->
+    <div class="demo-arrow">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
+
+    <!-- Mockup: AI extraction result -->
+    <div class="demo-panel">
+      <div class="demo-label">AI extracts &mdash; you verify</div>
+      <div class="workflow-demo">
+        <div class="wf-output" style="border-top:none">
+          <div class="wf-action">
+            <span class="wf-action-icon">+P</span> Add person: Sarah (Partner at Sequoia)
+            <span class="wf-action-check">&#10003;</span>
+          </div>
+          <div class="wf-action">
+            <span class="wf-action-icon">+C</span> Add company: Sequoia Capital
+            <span class="wf-action-check">&#10003;</span>
+          </div>
+          <div class="wf-action">
+            <span class="wf-action-icon">LN</span> Link: Sarah &harr; James (YC Demo Day)
+            <span class="wf-action-check">&#10003;</span>
+          </div>
+          <div class="wf-action">
+            <span class="wf-action-icon">~P</span> Next action: Follow up Thursday (Series A)
+            <span class="wf-action-check">&#10003;</span>
+          </div>
+          <div class="demo-modal-footer" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-sub)">
+            <span class="demo-hint">Click actions to approve or reject</span>
+            <div class="demo-modal-btns">
+              <span class="demo-btn-ghost">Discard</span>
+              <span class="demo-btn-primary">Confirm 4 actions</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="land-body" style="margin-top:32px">
+      <strong style="color:var(--txt)">No AI?</strong> Add contacts manually with a structured form — broken into sections: Who, Where you met, Interest, Follow-up. Not 30 fields at once.
+    </div>
+  </div>
+
+  <!-- Section 7: Free -->
+  <div class="free-section">
+    <div class="land-overline">Pricing</div>
+    <div class="land-h2">No credit card. No ads.<br><span class="hl">No catch.</span></div>
+    <div class="free-grid">
+      <div class="free-item"><span class="free-item-check">&#10003;</span> Open source</div>
+      <div class="free-item"><span class="free-item-check">&#10003;</span> No tracking</div>
+      <div class="free-item"><span class="free-item-check">&#10003;</span> Free forever</div>
+      <div class="free-item"><span class="free-item-check">&#10003;</span> No ads, ever</div>
+      <div class="free-item"><span class="free-item-check">&#10003;</span> No data collection</div>
+      <div class="free-item"><span class="free-item-check">&#10003;</span> You own your data</div>
+    </div>
+    <button class="land-cta" id="land-cta">Start now — free</button>
+  </div>
+
+  <!-- Footer -->
+  <div class="land-footer">
+    <span>kenoki.app</span>
+    <a href="https://github.com/shortalex12333/unified-terminal" target="_blank">GitHub</a>
+    <span>Built by Alex Short</span>
+    <span>MIT License</span>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══ TOPBAR ═══ -->
+<div class="topbar">
+  <div class="topbar-left">
+    <img src="img/k-small.png" alt="" class="topbar-logo" />
+    <span class="topbar-brand">KENOKI</span>
+    <span class="topbar-sep"></span>
+    <span class="topbar-context">Relationship Intelligence</span>
+  </div>
+  <div class="topbar-right">
+    <span class="topbar-stat" id="stat-people">0 people</span>
+    <span class="topbar-sep"></span>
+    <span class="topbar-stat" id="stat-companies">0 companies</span>
+    <span class="topbar-sep"></span>
+    <span class="topbar-stat" id="stat-relationships">0 links</span>
+    <span class="topbar-sep"></span>
+    <button class="ctrl-btn" id="import-btn">Import</button>
+    <button class="ctrl-btn" id="sign-out-btn">Sign out</button>
+  </div>
+</div>
+
+<!-- ═══ LENS BAR ═══ -->
+<div class="lens-bar" id="lens-bar">
+  <div class="lens-tabs">
+    <button class="lens-btn active" data-lens="network" title="Force-directed graph (1)">
+      <span class="lens-key">1</span>Network
+    </button>
+    <button class="lens-btn" data-lens="org" title="Org / company view (2)">
+      <span class="lens-key">2</span>Org
+    </button>
+    <button class="lens-btn" data-lens="time" title="Contact timeline (3)">
+      <span class="lens-key">3</span>Time
+    </button>
+    <button class="lens-btn" data-lens="strength" title="Tie strength — Granovetter (4)">
+      <span class="lens-key">4</span>Strength
+    </button>
+  </div>
+  <div class="lens-right">
+    <div class="embed-progress hidden" id="embed-progress">
+      <div class="embed-bar-track"><div class="embed-bar-fill" id="embed-bar-fill"></div></div>
+      <span id="embed-label">Building intelligence…</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MAIN LAYOUT ═══ -->
+<div class="main">
+
+  <!-- GRAPH PANEL -->
+  <div class="graph-panel">
+    <!-- Controls -->
+    <div class="graph-controls">
+      <input type="text" class="ctrl-search" id="search" placeholder="Search..." />
+      <select class="ctrl-select" id="tag-filter">
+        <option value="all">All</option>
+      </select>
+      <button class="ctrl-btn" id="fit-btn">Fit</button>
+    </div>
+
+    <!-- Add person button + AI shortcut -->
+    <div class="add-bar">
+      <button class="si-trigger" id="si-trigger">+ Add person</button>
+      <button class="si-trigger-ai" id="si-trigger-ai" title="Add via AI text">AI</button>
+    </div>
+
+    <!-- Legend (built dynamically from user's data) -->
+    <div class="legend" id="legend"></div>
+
+    <!-- Tooltip -->
+    <div class="tooltip hidden" id="tooltip"></div>
+
+    <!-- Empty state -->
+    <div class="empty-state hidden" id="empty-state">
+      <img src="img/k-med.png" alt="" class="empty-logo" />
+      <div class="empty-title">Your network starts here</div>
+      <div class="empty-desc">Import contacts from LinkedIn, iPhone, Google, or any CSV.<br>Or add someone manually with the + Add button above.</div>
+      <button class="btn-primary empty-btn" id="empty-import">Import contacts</button>
+      <div class="empty-guides">
+        <div class="empty-guide-title">How to export from:</div>
+        <div class="empty-guide-links">
+          <button class="empty-guide-link" data-guide="linkedin">LinkedIn</button>
+          <button class="empty-guide-link" data-guide="iphone">iPhone</button>
+          <button class="empty-guide-link" data-guide="google">Google</button>
+          <button class="empty-guide-link" data-guide="outlook">Outlook</button>
+          <button class="empty-guide-link" data-guide="facebook">Facebook</button>
+          <button class="empty-guide-link" data-guide="csv">Any CSV</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Export guides overlay -->
+    <div class="overlay hidden" id="guide-overlay">
+      <div class="overlay-backdrop" id="guide-backdrop"></div>
+      <div class="overlay-modal overlay-wide">
+        <div class="overlay-inner">
+          <div class="onboard-title" id="guide-title"></div>
+          <div class="guide-body" id="guide-body"></div>
+          <button class="btn-ghost" id="guide-close" style="margin-top:16px">Close</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Graph hint bar — dismissible, auto-hides after 8s -->
+    <div class="graph-hint" id="graph-hint">
+      <span class="graph-hint-text">
+        <kbd>Cmd+K</kbd> search &nbsp;·&nbsp; <kbd>Right-click</kbd> node to edit/delete &nbsp;·&nbsp; Drag to reposition &nbsp;·&nbsp; <kbd>1–4</kbd> switch views
+      </span>
+      <button class="graph-hint-close" id="graph-hint-close" title="Dismiss">×</button>
+    </div>
+
+    <!-- Graph canvas -->
+    <div id="graph"></div>
+
+    <!-- Person panel — slides in from right on node click -->
+    <div class="person-panel hidden" id="person-panel">
+      <div class="pp-header">
+        <div class="pp-ident">
+          <div class="pp-name" id="pp-name"></div>
+          <div class="pp-meta" id="pp-meta"></div>
+        </div>
+        <button class="pp-close" id="pp-close" title="Close">×</button>
+      </div>
+      <div class="pp-body" id="pp-body"></div>
+      <div class="pp-footer">
+        <button class="btn-primary pp-btn" id="pp-edit-btn">Edit</button>
+        <button class="btn-ghost pp-btn pp-delete" id="pp-delete-btn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHAT PANEL -->
+  <div class="chat-panel" id="chat-panel">
+    <div class="chat-hdr">
+      <span class="chat-title">Query network</span>
+      <div class="chat-hdr-actions">
+        <button class="ctrl-btn" id="chat-refresh">Refresh</button>
+        <button class="ctrl-btn" id="chat-clear">Clear</button>
+      </div>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-empty" id="chat-empty">
+        <div class="chat-empty-label">Try asking:</div>
+        <button class="chat-suggestion" data-q="Who are the most connected people in my network?">"Most connected people?"</button>
+        <button class="chat-suggestion" data-q="Which companies appear most in my contacts?">"Top companies?"</button>
+        <button class="chat-suggestion" data-q="Who should I follow up with?">"Who should I follow up with?"</button>
+        <button class="chat-suggestion" data-q="Who have I not contacted in over 30 days?">"Stale contacts?"</button>
+        <button class="chat-suggestion" data-q="Show me all my tags and how many people have each">"Tag breakdown?"</button>
+        <button class="chat-suggestion" data-q="Who do Person A and Person B both know?">"Mutual connections?"</button>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <input type="text" class="chat-input" id="chat-input" placeholder="Ask about your network..." />
+      <button class="btn-primary" id="chat-send">Ask</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AUTH OVERLAY ═══ -->
+<div class="overlay" id="auth-overlay">
+  <div class="overlay-backdrop"></div>
+  <div class="overlay-modal overlay-narrow">
+    <div class="overlay-inner">
+      <img src="img/k-small.png" alt="Kenoki" class="auth-logo" />
+      <div class="auth-brand">KENOKI</div>
+      <div class="auth-subtitle">Relationship Intelligence</div>
+
+      <div id="auth-form">
+        <input type="email" class="auth-input" id="auth-email" placeholder="Email" autocomplete="email" />
+        <input type="password" class="auth-input" id="auth-password" placeholder="Password" autocomplete="current-password" />
+        <div class="auth-error hidden" id="auth-error"></div>
+        <button class="btn-primary auth-btn" id="auth-submit">Sign in</button>
+        <button class="auth-toggle" id="auth-toggle">No account? <span>Sign up</span></button>
+      </div>
+
+      <div class="auth-confirm hidden" id="auth-confirm">
+        <div class="auth-confirm-msg">Check your email to confirm your account.</div>
+        <button class="btn-ghost" id="auth-back">Back to sign in</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ AI PROVIDER OVERLAY ═══ -->
+<div class="overlay hidden" id="provider-overlay">
+  <div class="overlay-backdrop"></div>
+  <div class="overlay-modal overlay-narrow">
+    <div class="overlay-inner">
+      <div class="onboard-title">Select AI provider</div>
+      <div class="onboard-desc">Used for parsing contacts and querying your network.</div>
+
+      <div class="provider-options">
+        <button class="provider-option" data-provider="ollama">
+          <div class="provider-name">Ollama (local)</div>
+          <div class="provider-desc">Free. Runs on your machine. No API key needed.</div>
+        </button>
+        <button class="provider-option" data-provider="openai">
+          <div class="provider-name">OpenAI</div>
+          <div class="provider-desc">GPT-4o, GPT-4. Requires API key.</div>
+        </button>
+        <button class="provider-option" data-provider="claude">
+          <div class="provider-name">Claude</div>
+          <div class="provider-desc">Claude Sonnet, Opus. Requires API key.</div>
+        </button>
+      </div>
+
+      <div class="provider-key-area hidden" id="provider-key-area">
+        <input type="password" class="auth-input" id="provider-key" placeholder="Paste API key" />
+      </div>
+
+      <button class="btn-primary auth-btn hidden" id="provider-save">Continue</button>
+      <button class="auth-toggle" id="provider-skip">Skip for now</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ IMPORT OVERLAY (onboarding + main app reuse) ═══ -->
+<div class="overlay hidden" id="import-overlay">
+  <div class="overlay-backdrop" id="import-backdrop"></div>
+  <div class="overlay-modal overlay-wide">
+    <div class="overlay-inner">
+
+      <!-- STEP 1: LinkedIn guide -->
+      <div class="import-step" id="import-step-1">
+        <div class="onboard-title">Export your LinkedIn connections</div>
+        <div class="onboard-desc">Follow these 3 steps on LinkedIn, then upload the file here.</div>
+
+        <div class="guide-steps">
+          <div class="guide-step active" data-step="1">
+            <div class="guide-step-num">1</div>
+            <div class="guide-step-content">
+              <div class="guide-step-title">Open Settings</div>
+              <div class="guide-step-desc">Click your profile icon → Settings & Privacy</div>
+              <img src="img/1.settings.png" alt="LinkedIn Settings" class="guide-img" />
+            </div>
+          </div>
+
+          <div class="guide-step" data-step="2">
+            <div class="guide-step-num">2</div>
+            <div class="guide-step-content">
+              <div class="guide-step-title">Data privacy</div>
+              <div class="guide-step-desc">Select "Data privacy" then "Download your data"</div>
+              <img src="img/2.Data_privacy.png" alt="Data Privacy" class="guide-img" />
+            </div>
+          </div>
+
+          <div class="guide-step" data-step="3">
+            <div class="guide-step-num">3</div>
+            <div class="guide-step-content">
+              <div class="guide-step-title">Download your data</div>
+              <div class="guide-step-desc">Select "Connections" and click "Request archive". LinkedIn emails you the file within 24 hours.</div>
+              <img src="img/3.Download_my_data.png" alt="Download Data" class="guide-img" />
+            </div>
+          </div>
+        </div>
+
+        <div class="guide-nav">
+          <button class="btn-ghost" id="guide-prev" disabled>Previous</button>
+          <div class="guide-dots">
+            <span class="guide-dot active" data-dot="1"></span>
+            <span class="guide-dot" data-dot="2"></span>
+            <span class="guide-dot" data-dot="3"></span>
+          </div>
+          <button class="btn-primary" id="guide-next">Next</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: Upload -->
+      <div class="import-step hidden" id="import-step-2">
+        <div class="onboard-title">Upload contacts</div>
+        <div class="onboard-desc">Import from any source — LinkedIn, iPhone, Google, Outlook, or any CSV.</div>
+
+        <div class="import-drop" id="import-drop">
+          <input type="file" accept=".csv,.vcf,.xlsx,.xls,.json,.zip,.html" id="import-file" class="import-file-input" />
+          <div class="import-drop-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <div class="import-drop-text">Drop file here or click to browse</div>
+          <div class="import-formats">CSV, vCard (.vcf), JSON, Excel, LinkedIn ZIP</div>
+        </div>
+
+        <div class="import-help" id="import-help">
+          <div class="import-help-label">Need help exporting?</div>
+          <div class="import-help-links">
+            <button class="empty-guide-link" data-guide="linkedin">LinkedIn</button>
+            <button class="empty-guide-link" data-guide="iphone">iPhone</button>
+            <button class="empty-guide-link" data-guide="google">Google</button>
+            <button class="empty-guide-link" data-guide="outlook">Outlook</button>
+            <button class="empty-guide-link" data-guide="facebook">Facebook</button>
+            <button class="empty-guide-link" data-guide="csv">Any CSV</button>
+          </div>
+        </div>
+
+        <div class="import-detected hidden" id="import-detected"></div>
+
+        <div class="import-preview hidden" id="import-preview">
+          <div class="import-status-bar">
+            <span class="import-count" id="import-count"></span>
+            <span class="import-dupes hidden" id="import-dupes"></span>
+          </div>
+          <div class="import-table-wrap">
+            <table class="import-table" id="import-table">
+              <thead><tr><th>Name</th><th>Position</th><th>Company</th><th>Connected</th><th>Status</th></tr></thead>
+              <tbody id="import-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="si-modal-footer">
+          <div class="si-modal-actions">
+            <button class="btn-ghost" id="import-back-to-guide">Back</button>
+            <button class="btn-ghost" id="import-skip">Skip</button>
+          </div>
+          <button class="btn-primary hidden" id="import-submit">Import contacts</button>
+        </div>
+      </div>
+
+      <!-- Notification toast -->
+      <div class="import-toast hidden" id="import-toast"></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SMART INPUT OVERLAY ═══ -->
+<div class="overlay hidden" id="si-overlay">
+  <div class="overlay-backdrop" id="si-backdrop"></div>
+  <div class="overlay-modal">
+    <div class="overlay-inner">
+      <div class="si-idle" id="si-idle">
+        <textarea class="si-textarea" id="si-text" rows="6" placeholder="Describe what happened. Who did you meet, what was discussed, any follow-ups."></textarea>
+        <div class="si-modal-footer">
+          <span class="si-hint">Enter to process</span>
+          <div class="si-modal-actions">
+            <button class="btn-ghost" id="si-cancel">Cancel</button>
+            <button class="btn-primary" id="si-submit">Process</button>
+          </div>
+        </div>
+      </div>
+      <div class="si-thinking hidden" id="si-thinking">
+        <span class="spinner"></span> Processing input...
+      </div>
+      <div class="si-review hidden" id="si-review">
+        <div class="si-summary" id="si-summary"></div>
+        <div class="si-actions" id="si-actions"></div>
+        <div class="si-modal-footer">
+          <span class="si-hint">Click actions to approve or reject</span>
+          <div class="si-modal-actions">
+            <button class="btn-ghost" id="si-discard">Discard</button>
+            <button class="btn-primary" id="si-confirm">Confirm</button>
+          </div>
+        </div>
+      </div>
+      <div class="si-done hidden" id="si-done">
+        <div class="si-results" id="si-results"></div>
+        <div class="si-modal-footer">
+          <span class="si-hint"></span>
+          <div class="si-modal-actions">
+            <button class="btn-ghost" id="si-reset">Done</button>
+            <button class="btn-primary" id="si-another">Add more</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Global toast -->
+<div class="global-toast hidden" id="global-toast"></div>
+
+<!-- Context menu — right-click on graph nodes -->
+<div class="ctx-menu hidden" id="ctx-menu">
+  <div class="ctx-item" id="ctx-open">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/></svg>
+    View profile
+  </div>
+  <div class="ctx-item" id="ctx-edit">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+    Edit
+  </div>
+  <div class="ctx-sep"></div>
+  <div class="ctx-item ctx-danger" id="ctx-delete">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+    Delete person
+  </div>
+</div>
+
+<!-- Add person overlay — schema form -->
+<div class="overlay hidden" id="add-person-overlay">
+  <div class="overlay-backdrop" id="add-person-backdrop"></div>
+  <div class="overlay-modal overlay-wide">
+    <div class="overlay-inner ap-inner">
+      <div class="ap-header">
+        <div class="onboard-title">Add person</div>
+        <button class="ap-ai-toggle" id="ap-ai-toggle">Use AI to parse notes →</button>
+      </div>
+      <div class="ap-form">
+        <div class="ap-row ap-2col">
+          <div class="ap-field">
+            <label class="ap-label">Name <span class="ap-required">*</span></label>
+            <input class="auth-input" type="text" id="ap-name" placeholder="Full name" autocomplete="off" />
+          </div>
+          <div class="ap-field">
+            <label class="ap-label">Role / Title</label>
+            <input class="auth-input" type="text" id="ap-role" placeholder="CEO, Captain, Engineer…" autocomplete="off" />
+          </div>
+        </div>
+        <div class="ap-row ap-2col">
+          <div class="ap-field">
+            <label class="ap-label">Company</label>
+            <input class="auth-input" type="text" id="ap-company" placeholder="Company name" list="ap-company-list" autocomplete="off" />
+            <datalist id="ap-company-list"></datalist>
+          </div>
+          <div class="ap-field">
+            <label class="ap-label">Industry</label>
+            <input class="auth-input" type="text" id="ap-industry" placeholder="Maritime, Finance…" autocomplete="off" />
+          </div>
+        </div>
+        <div class="ap-row ap-2col">
+          <div class="ap-field">
+            <label class="ap-label">Phone</label>
+            <input class="auth-input" type="tel" id="ap-phone" placeholder="+1 555 000 0000" />
+          </div>
+          <div class="ap-field">
+            <label class="ap-label">LinkedIn</label>
+            <input class="auth-input" type="text" id="ap-linkedin" placeholder="linkedin.com/in/…" />
+          </div>
+        </div>
+        <div class="ap-row">
+          <div class="ap-field">
+            <label class="ap-label">What they do</label>
+            <input class="auth-input" type="text" id="ap-does" placeholder="Short description of their work" autocomplete="off" />
+          </div>
+        </div>
+        <div class="ap-row">
+          <div class="ap-field">
+            <label class="ap-label">Notes</label>
+            <textarea class="auth-input ap-textarea" id="ap-notes" rows="2" placeholder="How you met, what to remember, mutual context…"></textarea>
+          </div>
+        </div>
+        <div class="ap-row">
+          <div class="ap-field">
+            <label class="ap-label">Next action</label>
+            <input class="auth-input" type="text" id="ap-next" placeholder="Follow up Thursday, intro to…" autocomplete="off" />
+          </div>
+        </div>
+      </div>
+      <div class="si-modal-footer" style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border-faint)">
+        <span class="si-hint ap-hint" id="ap-status">* Name is required</span>
+        <div class="si-modal-actions">
+          <button class="btn-ghost" id="add-person-cancel">Cancel</button>
+          <button class="btn-primary" id="add-person-save">Add to network</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMMAND PALETTE (Cmd+K) ═══ -->
+<div class="palette-overlay hidden" id="palette-overlay">
+  <div class="palette-backdrop" id="palette-backdrop"></div>
+  <div class="palette">
+    <div class="palette-input-row">
+      <svg class="palette-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="palette-input"
+        placeholder="Search people, @company, #tag, role:cto, stale: or /ask…"
+        autocomplete="off" spellcheck="false" />
+      <kbd class="palette-esc-key">esc</kbd>
+    </div>
+    <div class="palette-results" id="palette-results"></div>
+    <div class="palette-footer">
+      <span class="palette-hint"><kbd>@</kbd>company</span>
+      <span class="palette-hint"><kbd>#</kbd>tag</span>
+      <span class="palette-hint"><kbd>role:</kbd>cto</span>
+      <span class="palette-hint"><kbd>stale:</kbd></span>
+      <span class="palette-hint"><kbd>/ask</kbd> anything</span>
+      <span class="palette-footer-sep"></span>
+      <span class="palette-nav-hint"><kbd>↑↓</kbd> navigate · <kbd>↵</kbd> select</span>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
