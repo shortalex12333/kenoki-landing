@@ -2041,7 +2041,7 @@ async function embedSinglePerson(person) {
 
   return new Promise(resolve => {
     let worker;
-    try { worker = new Worker('embed-worker.js'); } catch { resolve(); return; }
+    try { worker = new Worker('projection_worker.js'); } catch { resolve(); return; }
     worker.onmessage = async ({ data: msg }) => {
       worker.terminate();
       if (!msg.error && msg.embedding) {
@@ -2682,75 +2682,65 @@ async function startEmbeddingQueue() {
   if (embedWorker) { embedWorker.terminate(); embedWorker = null; }
 
   try {
-    embedWorker = new Worker('embed-worker.js');
+    embedWorker = new Worker('projection_worker.js');
   } catch (e) {
-    // Web Workers may be blocked (e.g. file:// protocol). Silently skip.
     hide('embed-progress');
     return;
   }
 
+  embedWorker.onerror = (e) => {
+    console.error('projection_worker error:', e.message);
+    hide('embed-progress');
+    if (embedWorker) { embedWorker.terminate(); embedWorker = null; }
+  };
+
+  const companyPatterns = /\b(inc|ltd|llc|corp|group|holdings|gmbh|pty|plc|limited|& co|s\.a\.)\b/i;
+
+  // Process one response, save to DB, send next person
+  let cursor = 0;
+
+  function sendNext() {
+    if (!embedWorker || cursor >= embedQueue.length) return;
+    const p = embedQueue[cursor++];
+    const text = [p.role, p.role, p.industry, p.what_they_do].filter(Boolean).join(' ') ||
+                 p.full_name || '';
+    embedWorker.postMessage({ id: p.id, text });
+  }
+
   embedWorker.onmessage = async ({ data: msg }) => {
-    if (msg.error) { embedProcessed++; } // skip failures silently
-    else {
-      // Store embedding in Supabase
-      // Also flag dirty data at write time: detect company stored as person, etc.
+    if (!msg.error && msg.embedding) {
       const person = embedQueue.find(p => p.id === msg.id);
-      const dirtyFlags = {};
+      const update = { embedding: msg.embedding };
       if (person) {
+        const dirtyFlags = {};
         const name = (person.full_name || '').toLowerCase();
         const role = (person.role || '');
-        const companyPatterns = /\b(inc|ltd|llc|corp|group|holdings|gmbh|pty|plc|limited|& co|s\.a\.)\b/i;
         if (companyPatterns.test(name)) dirtyFlags.name_is_company = true;
         if (role.length > 40 || companyPatterns.test(role)) dirtyFlags.role_is_company = true;
+        if (Object.keys(dirtyFlags).length) update.dirty_data_flags = dirtyFlags;
       }
-      const update = { embedding: msg.embedding };
-      if (Object.keys(dirtyFlags).length) update.dirty_data_flags = dirtyFlags;
       await sb.from('people').update(update).eq('id', msg.id);
-      embedProcessed++;
     }
 
+    embedProcessed++;
     const pct = Math.round((embedProcessed / embedTotal) * 100);
     document.getElementById('embed-bar-fill').style.width = pct + '%';
-    document.getElementById('embed-label').textContent = `Building intelligence… ${embedProcessed}/${embedTotal}`;
+    document.getElementById('embed-label').textContent = `Projecting… ${embedProcessed}/${embedTotal}`;
 
     if (embedProcessed >= embedTotal) {
       hide('embed-progress');
       embedWorker.terminate();
       embedWorker = null;
-      // Embeddings done — re-run inference to generate semantic-similar edges
-      // These only appear after vectors exist, so we must trigger a second pass
-      showToast('Embeddings complete — computing semantic connections…');
+      showToast('Projections complete — computing semantic connections…');
       await inferEdges();
+    } else {
+      sendNext(); // pipeline: process one at a time, no complex batch pacing
     }
   };
 
-  embedWorker.onerror = () => {
-    hide('embed-progress');
-    if (embedWorker) { embedWorker.terminate(); embedWorker = null; }
-  };
-
-  // Send in batches of 5 to avoid overwhelming the worker
-  const BATCH = 5;
-  function sendBatch(start) {
-    embedQueue.slice(start, start + BATCH).forEach(p => {
-      // Weight role and industry heavily — these are the semantic signals.
-      // Repeating role twice makes the embedding cluster by function not name.
-      // Format: "{role} {role} {industry} {what_they_do}" — name excluded intentionally.
-      const text = [p.role, p.role, p.industry, p.what_they_do].filter(Boolean).join(' ') ||
-                   p.full_name || '';
-      embedWorker?.postMessage({ id: p.id, text });
-    });
-  }
-
-  // Send first batch, then piggyback on responses for pacing
-  let sent = 0;
-  const origOnMessage = embedWorker.onmessage;
-  embedWorker.onmessage = async (e) => {
-    await origOnMessage(e);
-    sent++;
-    if (sent % BATCH === 0 && sent < embedTotal) sendBatch(sent);
-  };
-  sendBatch(0);
+  // Seed the pipeline with CONCURRENCY parallel requests
+  const CONCURRENCY = 4;
+  for (let i = 0; i < CONCURRENCY; i++) sendNext();
 }
 
 // ═══════════════════════════════════════════════════════════════
